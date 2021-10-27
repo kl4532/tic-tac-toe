@@ -1,6 +1,6 @@
 <div class="board grid grid-cols-3 gap-0">
   <app-field *ngFor="let field of fields"
-             (changeMark)="$event.valueOf() === 1 ? current = 2 : current = 1"
+             (changeMark)="$event?.valueOf() === 1 ? current = 2 : current = 1"
              (click)="setValue(field.id)"
              [(ngModel)]="field.val">
   </app-field>
