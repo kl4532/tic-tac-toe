@@ -16,8 +16,9 @@
   </div>
 </div>
 <div class="board grid grid-cols-3 gap-0">
+<!--  (changeMark)="$event?.valueOf() === 1 ? current = 2 : current = 1"-->
+
   <app-field *ngFor="let field of fields"
-             (changeMark)="$event?.valueOf() === 1 ? current = 2 : current = 1"
              (click)="setValue(field.id, field.val)"
              [disabled]="!!field.val"
              [(ngModel)]="field.val">

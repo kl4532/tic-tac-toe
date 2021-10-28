@@ -24,6 +24,7 @@ export class AppComponent implements OnInit{
 
   setValue(i: number, val: number) {
     if(!val) {
+      this.current = this.current === 1 ? this.current = 2 : this.current = 1;
       this.fields[i].val = this.current;
       this.checkGame(this.fields);
     }
@@ -31,30 +32,32 @@ export class AppComponent implements OnInit{
 
   checkGame(fields: Field[]) {
     const status = this.gameService.checkGameState(fields, this.current);
-    switch (status) {
-      case 1:
-        setTimeout(() => {
+    setTimeout(() => {
+      console.log(
+        'best move',
+        this.gameService.findBestMove(this.fields, this.current)
+    )
+      switch (status) {
+        case 1:
           alert('X wins');
-          this.fields = this.gameService.init();
-        })
-        break;
-      case 2:
-        setTimeout(() => {
+          this.reset();
+          break;
+        case 2:
           alert('O wins');
-          this.fields = this.gameService.init();
-        })
-        break;
-      case 3:
-        setTimeout(() => {
+          this.reset();
+          break;
+        case 3:
           alert('DRAW!');
-          this.fields = this.gameService.init();
-        })
-        break;
-      default:
-    }
+          this.reset();
+          break;
+        default:
+      }
+    })
   }
 
   reset() {
     this.fields = this.gameService.init();
+    this.current = 0;
+
   }
 }
