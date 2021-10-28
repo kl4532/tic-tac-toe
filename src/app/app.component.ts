@@ -14,6 +14,7 @@ export interface Field {
 export class AppComponent implements OnInit{
   fields: Field[] = [];
   current = 0;
+  aiMode = false;
 
   constructor(private gameService: GameService) {}
 
@@ -21,9 +22,11 @@ export class AppComponent implements OnInit{
     this.fields = this.gameService.init();
   }
 
-  setValue(i: any) {
-    this.fields[i].val = this.current;
-    this.checkGame(this.fields);
+  setValue(i: number, val: number) {
+    if(!val) {
+      this.fields[i].val = this.current;
+      this.checkGame(this.fields);
+    }
   }
 
   checkGame(fields: Field[]) {
@@ -49,5 +52,9 @@ export class AppComponent implements OnInit{
         break;
       default:
     }
+  }
+
+  reset() {
+    this.fields = this.gameService.init();
   }
 }

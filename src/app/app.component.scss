@@ -8,6 +8,10 @@
   width: 30rem;
 }
 
+.form-row {
+  @apply flex justify-center items-center space-x-2 mt-3;
+}
+
 @media only screen and (max-width: 481px)  {
   .board {
     outline: 2px solid white;

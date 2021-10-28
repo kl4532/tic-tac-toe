@@ -33,7 +33,9 @@ export class FieldComponent implements OnInit, ControlValueAccessor {
   }
   // this method sets the value programmatically
   writeValue(value: number){
+    if(!this.val) {
       this.value = value
+    }
   }
   // upon UI element value changes, this method gets triggered
   registerOnChange(fn: any){
