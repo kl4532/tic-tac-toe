@@ -21,12 +21,6 @@ export class GameService {
   }
 
   checkGameState(fields: Field[], lastMark: number): number {
-    const isDraw = fields.find(f => f.val === 0);
-
-    if(!isDraw) {
-      return 3;
-    }
-
     if(
       fields[0].val === fields[1].val && fields[0].val === fields[2].val && fields[0].val !== 0 ||
       fields[3].val === fields[4].val && fields[3].val === fields[5].val && fields[3].val !== 0 ||
@@ -41,6 +35,13 @@ export class GameService {
     ) {
       return lastMark
     }
+
+    const isDraw = fields.find(f => f.val === 0);
+
+    if(!isDraw) {
+      return 3;
+    }
+
     return 0;
   }
 
