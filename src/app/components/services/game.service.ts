@@ -54,30 +54,42 @@ export class GameService {
     return 0;
   }
 
-  findBestMove(fields: Field[], player: number): Field | null{
-    let bestMove = null;
-    let bestVal = -Infinity;
+  findBestMove(fields: Field[], player: number): number {
+    let bestMoveId = 0;
+    let bestVal = -1000;
 
     fields.forEach((field: Field) => {
         if(field.val === 0) {
           field.val = 1;
-          const moveVal = this.miniMax(fields, 1, player);
+          const moveVal = this.miniMax(fields, 0, player);
           field.val = 0;
 
           if (moveVal > bestVal) {
-            bestMove = field;
+            bestMoveId = field.id;
             bestVal = moveVal;
           }
         }
       }
     )
-    return bestMove;
+    console.log(`Best move for ${player} ${bestMoveId}`);
+    return bestMoveId;
   }
 
   miniMax(fields: Field[], depth: number, player: number): number {
     let score = this.evaluate(fields, player);
-    if(score === 10 || score === -10 || score === 0) {
-      return score;
+    // if(score === 10 || score === -10) {
+    //   return score - ;
+    // }
+    if(score === 10) {
+      return score - depth;
+    }
+
+    if(score === -10) {
+      return score + depth;
+    }
+
+    if(!this.areMovesLeft(fields)) {
+      return 0;
     }
 
     if(player === 1) {
@@ -85,24 +97,33 @@ export class GameService {
       fields.forEach(field => {
         if(field.val === 0) {
           field.val = 1;
-          const currentPlayer = player === 1 ? 2 : 1;
-          best = Math.max(best, this.miniMax(fields, depth + 1, currentPlayer))
+          best = Math.max(best, this.miniMax(fields, depth + 1, 2));
           field.val = 0;
         }
       })
+      console.log('Max', best);
       return best;
     } else {
       let best = Infinity;
       fields.forEach(field => {
         if(field.val === 0) {
           field.val = 2;
-          const currentPlayer = player === 1 ? 2 : 1;
-          best = Math.max(best, this.miniMax(fields, depth + 1, currentPlayer))
+          best = Math.min(best, this.miniMax(fields, depth + 1, 1));
           field.val = 0;
         }
       })
       return best;
+      console.log('Min', best);
     }
+
+  }
+
+  areMovesLeft(fields: Field[]) {
+    return !!fields.find(f => f.val === 0);
+  }
+
+  changeCurrent(currentPlayer: number): number {
+    return currentPlayer === 1 ? 2 : 1;
   }
 
 }

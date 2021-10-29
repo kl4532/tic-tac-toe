@@ -14,29 +14,34 @@ export interface Field {
 export class AppComponent implements OnInit{
   fields: Field[] = [];
   current = 0;
-  aiMode = false;
+  isAiMode = true;
+  isAiMove = false;
+  aiFirst = false;
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.fields = this.gameService.init();
+    // if(this.aiFirst) {
+    //   this.isAiMove = true;
+    //   this.aiMove();
+    // }
   }
 
   setValue(i: number, val: number) {
     if(!val) {
       this.current = this.current === 1 ? this.current = 2 : this.current = 1;
       this.fields[i].val = this.current;
+      this.isAiMove = true;
       this.checkGame(this.fields);
+      if(this.isAiMode)
+        this.aiMove();
     }
   }
 
   checkGame(fields: Field[]) {
     const status = this.gameService.checkGameState(fields, this.current);
     setTimeout(() => {
-      console.log(
-        'best move',
-        this.gameService.findBestMove(this.fields, this.current)
-    )
       switch (status) {
         case 1:
           alert('X wins');
@@ -55,9 +60,26 @@ export class AppComponent implements OnInit{
     })
   }
 
-  reset() {
-    this.fields = this.gameService.init();
-    this.current = 0;
+  aiMove() {
+    setTimeout(()=> {
+      if(this.isAiMode && this.isAiMove) {
+        this.isAiMove = false;
+        this.current = this.current === 0 ? 2 : this.gameService.changeCurrent(this.current);
+        const fieldId = this.gameService.findBestMove(this.fields, this.gameService.changeCurrent(this.current));
+        this.fields[fieldId].val = this.current;
+        this.checkGame(this.fields);
+      }
+    },100)
+  }
 
+  reset() {
+    this.current = 0;
+    this.isAiMove = false;
+    this.fields = this.gameService.init();
+    this.aiFirst = !this.aiFirst;
+    if(this.aiFirst) {
+      this.isAiMove = true;
+      this.aiMove();
+    }
   }
 }

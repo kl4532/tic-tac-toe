@@ -4,9 +4,9 @@
 <div>
   <div class="form-row">
     <label for="ai-mode">Human vs AI</label>
-    <input type="checkbox" id="ai-mode" [(ngModel)]="aiMode">
+    <input type="checkbox" id="ai-mode" [(ngModel)]="isAiMode">
   </div>
-  <div class="form-row" *ngIf="aiMode">
+  <div class="form-row" *ngIf="isAiMode">
     <label for="difficulty">Difficulty</label>
     <select name="" id="difficulty" >
       <option>Joke</option>
@@ -20,10 +20,11 @@
 
   <app-field *ngFor="let field of fields"
              (click)="setValue(field.id, field.val)"
-             [disabled]="!!field.val"
+             [disabled]="!!field.val || isAiMove"
              [(ngModel)]="field.val">
   </app-field>
 </div>
 <div class="form-row">
   <button class="bg-yellow-300 p-2 rounded" (click)="reset()">Reset</button>
+  <p *ngIf="isAiMode">Turn: {{isAiMove ? "AI" : "PLAYER"}}</p>
 </div>
